@@ -81,10 +81,10 @@ async function includeFavorite(req, res) {
             const newLike = getUser.like.filter(element => element.id !== movie.id)
             // console.log(newLike);
             const icludeMovie = await User.findByIdAndUpdate({ _id }, { like: newLike })
-            return res.status(200).json({ message: 'Filme removida da lista de favoritos!' })
+            return res.status(200).json({ message: 'Filme removido da lista de favoritos!' })
         }
         const icludeMovie = await User.findByIdAndUpdate({ _id }, { like: [...getUser.like, movie] })
-        return res.status(200).json({ message: "Filme incluído com sucesso!" })
+        return res.status(200).json({ message: "Filme incluído na lista de favoritos!" })
     } catch (error) {
         console.log(error)
         return res.status(500).json({ message: "Erro interno de servidor!" })
