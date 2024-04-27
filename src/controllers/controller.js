@@ -89,8 +89,35 @@ async function includeFavorite(req, res) {
             const icludeMovie = await User.findByIdAndUpdate({ _id }, { like: newLike })
             return res.status(200).json({ message: 'Filme removido da lista de favoritos!' })
         }
-        const icludeMovie = await User.findByIdAndUpdate({ _id }, { like: [...getUser.like, movie] })
+        const icludeMovie = await User.findByIdAndUpdate({ _id }, { like: [movie, ...getUser.like] })
         return res.status(200).json({ message: "Filme incluído na lista de favoritos!" })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Erro interno de servidor!" })
+    }
+}
+
+async function includeWatch(req, res) {
+    const { movie } = req.body
+    // console.log(movie);
+    // return
+    const _id = req.userId
+    try {
+        if (!_id) {
+            return res.status(400).json({ message: 'É necessário fazer login.' })
+        }
+        const getUser = await User.findById({ _id })
+        if (!getUser) {
+            return res.status(400).json({ message: 'Usuário não encontrado!' })
+        }
+        const duplicateMovie = getUser.watch.some(element => element.id === movie.id)
+        if (duplicateMovie) {
+            const newWatch = getUser.watch.filter(element => element.id !== movie.id)
+            const includeMovie = await User.findByIdAndUpdate({ _id }, { watch: newWatch })
+            return res.status(200).json({ message: 'Filme removido da lista "Assistir Depois"!' })
+        }
+        const includeMovie = await User.findByIdAndUpdate({ _id }, { watch: [...getUser.watch, movie] })
+        return res.status(200).json({ message: "Filme incluído na lista 'Assistir Depois'!" })
     } catch (error) {
         console.log(error)
         return res.status(500).json({ message: "Erro interno de servidor!" })
@@ -120,4 +147,4 @@ async function getCompareMovies(req, res) {
 }
 
 
-module.exports = { home, createUser, login, getUser, includeFavorite, getCompareMovies }
+module.exports = { home, createUser, login, getUser, includeFavorite, getCompareMovies, includeWatch }

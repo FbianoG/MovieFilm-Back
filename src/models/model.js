@@ -7,6 +7,7 @@ const User = mongoose.model('User', {
     name: { type: String, required: true },
     date: { type: String, required: true },
     like: Array,
+    watch: Array,
 })
 
 
