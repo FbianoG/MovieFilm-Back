@@ -10,7 +10,9 @@ async function home(req, res) {
 }
 
 async function createUser(req, res) {
-    const { email, password, date, name } = req.body
+    let { email, password, date, name } = req.body
+    email = email.toLowerCase()
+    name = name.toLowerCase()
     try {
         if (!email || !password || !date || !name) {
             return res.status(400).json({ message: "Preencha todos os campos!" })
@@ -29,7 +31,8 @@ async function createUser(req, res) {
 }
 
 async function login(req, res) {
-    const { email, password } = req.body
+    let { email, password } = req.body
+    email = email.toLowerCase()
     try {
         if (!email || !password) {
             return res.status(400).json({ message: "Preencha todos os campos!" })
@@ -95,7 +98,8 @@ async function includeFavorite(req, res) {
 }
 
 async function getCompareMovies(req, res) {
-    const { email } = req.body
+    let { email } = req.body
+    email = email.toLowerCase()
     const _id = req.userId
     try {
         if (!_id) {
