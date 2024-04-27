@@ -58,6 +58,9 @@ async function getUser(req, res) {
             return res.status(400).json({ message: 'É necessário fazer login.' })
         }
         const getUser = await User.findById({ _id }, '-password -date')
+        if (!getUser) {
+            return res.status(400).json({ message: "Usuário não encontrado." })
+        }
         return res.status(200).json(getUser)
     } catch (error) {
         console.log(error);
@@ -91,6 +94,26 @@ async function includeFavorite(req, res) {
     }
 }
 
+async function getCompareMovies(req, res) {
+    const { email } = req.body
+    const _id = req.userId
+    try {
+        if (!_id) {
+            return res.status(400).json({ message: 'É necessário fazer login.' })
+        }
+        const getUser = await User.findById({ _id }, '-password -date')
+        const getUser2 = await User.findOne({ email }, '-password -date')
+        if (!getUser || !getUser2) {
+            return res.status(400).json({ message: 'Usuário não encontrado' })
+        }
+        // console.log(getUser);
+        return res.status(200).json({ user1: getUser, user2: getUser2 })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Erro interno de servidor!" })
+    }
+}
 
 
-module.exports = { home, createUser, login, getUser, includeFavorite }
+module.exports = { home, createUser, login, getUser, includeFavorite, getCompareMovies }
