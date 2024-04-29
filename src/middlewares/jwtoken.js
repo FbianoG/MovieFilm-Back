@@ -14,10 +14,9 @@ async function verifyToken(req, res, next) { // validação do token
         req.userId = decoded.id // crio "tipo uma variáve" que é enviado no "next()" para ser consultada no controllers
         next()
     } catch (error) {
-        return res.status(500).json({ auth: false, message: 'Sessão expirada. Faça login novamente.' })
+        return res.status(401).json({ auth: false, message: 'Sessão expirada. Faça login novamente.' })
     }
 }
-
 
 async function createToken(e) { // cria o token
     const token = await jwt.sign({ id: e }, secretKey, { expiresIn: "2h" })
