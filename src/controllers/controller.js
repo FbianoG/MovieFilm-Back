@@ -71,6 +71,23 @@ async function getUser(req, res) {
     }
 }
 
+async function getAllUser(req, res) {
+    const _id = req.userId
+    try {
+        if (!_id) {
+            return res.status(400).json({ message: 'É necessário fazer login.' })
+        }
+        const getAllUser = await User.find({}, '-password -date')
+        if (!getAllUser) {
+            return res.status(400).json({ message: "Usuário não encontrado." })
+        }
+        return res.status(200).json(getAllUser)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Erro interno de servido!' })
+    }
+}
+
 async function includeFavorite(req, res) {
     const { movie } = req.body
     const _id = req.userId
@@ -147,4 +164,4 @@ async function getCompareMovies(req, res) {
 }
 
 
-module.exports = { home, createUser, login, getUser, includeFavorite, getCompareMovies, includeWatch }
+module.exports = { home, createUser, login, getUser, includeFavorite, getCompareMovies, includeWatch, getAllUser }
